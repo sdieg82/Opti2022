@@ -10,7 +10,9 @@ const NUEVO_PRODUCTO = gql`
     mutation nuevoProducto($input: ProductoInput) {
         nuevoProducto(input: $input) {
             id
-            codigo
+            marca
+            modelo
+            nombreProveedor
             nombre
             existencia
             precio    
@@ -22,12 +24,29 @@ const OBTENER_PRODUCTOS = gql`
   query obtenerProductos {
       obtenerProductos {
           id
-          codigo
+          marca
+          modelo
+          nombreProveedor
           nombre 
           precio
           existencia
       }
   }
+`;
+
+const OBTENER_PROVEEDORES = gql`
+    query obtenerProveedores {
+        obtenerProveedores {
+            id  
+            nombre
+            apellido
+            direccion
+            cedula
+            email
+            telefono
+          }
+    }
+
 `;
 
 const NuevoProducto = () => {
@@ -57,7 +76,9 @@ const NuevoProducto = () => {
     // Formulario para nuevos productos
     const formik = useFormik({
         initialValues: {
-            codigo:'',
+            marca:'',
+            modelo:'',
+            nombreProveedor:'',
             nombre: '',
             existencia: '',
             precio: '',
@@ -65,11 +86,16 @@ const NuevoProducto = () => {
             
         },
         validationSchema: Yup.object({
-            codigo: Yup.string() 
-                        .required('El código del producto es obligatorio'), 
+            marca: Yup.string() 
+                        .required('La marca del producto es obligatorio'),
+            modelo: Yup.string() 
+                        .required('El modelo del producto es obligatorio'),  
+            nombreProveedor: Yup.string() 
+                        .required('El nombre del Proveedor es obligatorio')
+                        .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras "), 
             nombre: Yup.string() 
                         .required('El nombre del producto es obligatorio')
-                        .matches(/^[aA-zZ\s]+$/, "Ingrese solo letras "),
+                        .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras "),
             // marca: Yup.string() 
             //             .required('La marca del producto es obligatorio')
             //             .matches(/^[aA-zZ\s]+$/, "Ingrese solo letras "),
@@ -87,13 +113,15 @@ const NuevoProducto = () => {
         }), 
         onSubmit: async valores => {
 
-            const {codigo, nombre,existencia, precio} = valores;
+            const {marca, nombre,existencia, precio,modelo,nombreProveedor} = valores;
 
             try {
                 const { data } = await nuevoProducto({
                     variables: {
                         input: {
-                            codigo,
+                            marca,
+                            modelo,
+                            nombreProveedor,
                             nombre,
                             // marca,
                             existencia,
@@ -145,38 +173,84 @@ const NuevoProducto = () => {
                         onSubmit={formik.handleSubmit}
                     >
                             <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="codigo">
-                                    Codigo
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombreProveedor">
+                                    Nombre del Proveedor
                                 </label>
 
                                 <input
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="codigo"
+                                    id="nombreProveedor"
                                     type="text"
-                                    placeholder="Código del producto"
+                                    placeholder="Nombre del Proveedor"
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
-                                    value={formik.values.codigo}
+                                    value={formik.values.nombreProveedor}
                                 />
                             </div>
 
-                            { formik.touched.codigo && formik.errors.codigo ? (
+                            { formik.touched.nombreProveedor && formik.errors.nombreProveedor ? (
                                 <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
                                     <p className="font-bold">Error</p>
-                                    <p>{formik.errors.codigo}</p>
+                                    <p>{formik.errors.nombreProveedor}</p>
+                                </div>
+                            ) : null  }
+
+                        <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="marca">
+                                    Marca del Producto
+                                </label>
+
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="marca"
+                                    type="text"
+                                    placeholder="Marca del producto"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.marca}
+                                />
+                            </div>
+
+                            { formik.touched.marca && formik.errors.marca ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
+                                    <p className="font-bold">Error</p>
+                                    <p>{formik.errors.marca}</p>
+                                </div>
+                            ) : null  }
+
+                        <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="modelo">
+                                    Modelo del Producto
+                                </label>
+
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="modelo"
+                                    type="text"
+                                    placeholder="Modelo del producto"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.modelo}
+                                />
+                            </div>
+
+                            { formik.touched.modelo && formik.errors.modelo ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
+                                    <p className="font-bold">Error</p>
+                                    <p>{formik.errors.modelo}</p>
                                 </div>
                             ) : null  }
                             
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
-                                    Nombre
+                                    Tipo del Producto
                                 </label>
 
                                 <input
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="nombre"
                                     type="text"
-                                    placeholder="Nombre Producto"
+                                    placeholder="Tipo del Producto"
                                     onChange={formik.handleChange}
                                     onBlur={formik.handleBlur}
                                     value={formik.values.nombre}

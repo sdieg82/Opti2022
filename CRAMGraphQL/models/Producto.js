@@ -1,6 +1,12 @@
 const mongoose=require('mongoose');
 
 const ProductosSchema=mongoose.Schema({
+    nombreProveedor:{
+        type:String,
+        required:true,
+        trim:true
+
+    },
     nombre:{
         type:String,
         required:true,
@@ -17,7 +23,13 @@ const ProductosSchema=mongoose.Schema({
         trim:true
 
     },
-    codigo:{
+    modelo:{
+        type:String,
+        required:true,
+        trim:true
+
+    },
+    marca:{
         type:String,
         required:true,
         trim:true

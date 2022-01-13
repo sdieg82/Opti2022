@@ -17,7 +17,9 @@ const typeDefs = gql`
 
     type Producto {
         id: ID
-        codigo:String
+        marca:String
+        nombreProveedor:String
+        modelo:String
         nombre: String
         existencia: Int
         precio: Float
@@ -96,10 +98,13 @@ const typeDefs = gql`
     }
 
     input ProductoInput {
-        codigo:String!
+        nombreProveedor:String!
+        marca:String!
+        modelo:String!
         nombre: String!
         existencia: Int!
         precio: Float!
+        
     }
 
     input ClienteInput {

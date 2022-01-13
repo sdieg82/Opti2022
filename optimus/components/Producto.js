@@ -13,7 +13,9 @@ const OBTENER_PRODUCTOS = gql`
   query obtenerProductos {
       obtenerProductos {
           id
-          codigo
+          marca
+          modelo
+          nombreProveedor
           nombre
           precio
           existencia
@@ -23,7 +25,7 @@ const OBTENER_PRODUCTOS = gql`
 `;
 
 const Producto = ({producto}) => {
-    const { codigo, nombre, precio, existencia, id } = producto;
+    const { codigo, nombre, precio, marca,modelo,nombreProveedor, existencia, id } = producto;
 
     // Mutation para eliminar productos
     const [ eliminarProducto ] = useMutation(ELIMINAR_PRODUCTO, {
@@ -88,13 +90,15 @@ const Producto = ({producto}) => {
 
     return ( 
         <tr>
-            <td className="border px-4 py-2">{codigo} </td>
+            <td className="border px-4 py-2">{nombreProveedor} </td>
             <td className="border px-4 py-2">{nombre} </td>
+            <td className="border px-4 py-2">{marca} </td>
+            <td className="border px-4 py-2">{modelo} </td>
             {/* <td className="border px-4 py-2">{marca} </td> */}
             <td className="border px-4 py-2">{existencia} Piezas</td>
             <td className="border px-4 py-2">$ {precio} </td>
            
-            <td className="border px-4 py-2">
+            {/* <td className="border px-4 py-2">
                 <button
                         type="button"
                         className="flex justify-center items-center bg-red-800 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
@@ -103,7 +107,7 @@ const Producto = ({producto}) => {
                     Eliminar
                     <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" className="w-4 h-4 ml-2"><path d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </button>
-            </td>
+            </td> */}
             <td className="border px-4 py-2">
                      <button
                         type="button"

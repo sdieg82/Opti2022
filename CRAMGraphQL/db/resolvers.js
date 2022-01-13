@@ -242,8 +242,8 @@ const resolvers = {
         nuevoProducto: async (_, {input}) => {
            // Revisar si el codigo prodcuto ya esta registrado
            
-           const { codigo } = input;
-           const existeCodigo = await Producto.findOne({codigo});
+           const { marca} = input;
+           const existeCodigo = await Producto.findOne({marca});
            if (existeCodigo) {
                throw new Error('El código del producto ya está registrado');
            }

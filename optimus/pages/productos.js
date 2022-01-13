@@ -7,7 +7,9 @@ const OBTENER_PRODUCTOS = gql`
   query obtenerProductos {
       obtenerProductos {
           id
-          codigo
+          marca
+          modelo
+          nombreProveedor
           nombre
           precio
           existencia
@@ -44,13 +46,15 @@ const Productos = () => {
           <table className="table-auto shadow-md mt-10 w-full w-lg">
             <thead className="bg-gray-800">
               <tr className="text-white">
-                 <th className="w-1/6 py-2">Código</th>
-                  <th className="w-1/6 py-2">Nombre</th>
+                 <th className="w-1/7 py-2">Nombre Proveedor</th>
+                 <th className="w-1/7 py-2">Nombre del Producto</th>
+                  <th className="w-1/7 py-2">Marca</th>
+                  <th className="w-1/7 py-2">Modelo</th>
                   {/* <th className="w-1/7 py-2">Marca</th> */}
-                  <th className="w-1/6 py-2">Existencia</th>
-                  <th className="w-1/6 py-2">Precio</th>
-                  <th className="w-1/6 py-2">Eliminar</th>
-                  <th className="w-1/6 py-2">Editar</th>
+                  <th className="w-1/7 py-2">Existencia</th>
+                  <th className="w-1/7 py-2">Precio</th>
+                 
+                  <th className="w-1/7 py-2">Editar</th>
                  
               </tr>
             </thead>

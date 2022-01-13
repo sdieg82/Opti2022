@@ -3,8 +3,9 @@ import Layout from '../components/Layout';
 import Link from 'next/link';
 import { gql, useQuery } from '@apollo/client'
 import Pedido from '../components/Pedido';
-import DatePicker from 'react-datepicker';
+import dateFilter from '../components/dateFilter';
 import 'react-datepicker/dist/react-datepicker.css';
+
 
 
 const OBTENER_PEDIDOS = gql`
@@ -48,12 +49,17 @@ const Pedidos = () => {
      
       
     <Layout>
+      
+    
+   
     <div className={"border-t-4 mt-4 bg-white rounded p-2 md:grid md:grid-cols-2 md:gap-4 shadow-lg"}>
     <h1 className="text-2xl text-gray-800 font-light">Pedidos</h1>
     <div>
-    <p className="mt-5 text-center text-2xl">Búsqueda por fecha</p>
+    <dateFilter> 
+      
+    </dateFilter>
    
-
+    
     {/* <button 
                 onClick={() => cerrarSesion() }
                 type="button"
