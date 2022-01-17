@@ -5,6 +5,8 @@ import * as Yup from 'yup'
 import {gql, useMutation} from '@apollo/client' 
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
+import Select from 'react-select'
+import Proveedor from '../components/Proveedor';
 
 const NUEVO_PRODUCTO = gql`
     mutation nuevoProducto($input: ProductoInput) {
@@ -34,6 +36,8 @@ const OBTENER_PRODUCTOS = gql`
   }
 `;
 
+
+
 const OBTENER_PROVEEDORES = gql`
     query obtenerProveedores {
         obtenerProveedores {
@@ -56,23 +60,24 @@ const NuevoProducto = () => {
 
      // Mensaje de alerta
      const [mensaje, guardarMensaje] = useState(null);
-
+     
     // Mutation de apollo
     const [nuevoProducto] = useMutation(NUEVO_PRODUCTO, {
         update(cache, { data: { nuevoProducto } }) {
             // obtener el objeto de cache
             const { obtenerProductos } = cache.readQuery({ query: OBTENER_PRODUCTOS });
-            
+           
             // reescribir ese objeto
             cache.writeQuery({
                 query: OBTENER_PRODUCTOS,
                 data: {
-                    obtenerProductos: [...obtenerProductos, nuevoProducto]
+                    obtenerProductos: [...obtenerProductos,nuevoProducto]
                 }
             });
         }
     });
 
+  
     // Formulario para nuevos productos
     const formik = useFormik({
         initialValues: {
@@ -90,9 +95,9 @@ const NuevoProducto = () => {
                         .required('La marca del producto es obligatorio'),
             modelo: Yup.string() 
                         .required('El modelo del producto es obligatorio'),  
-            nombreProveedor: Yup.string() 
-                        .required('El nombre del Proveedor es obligatorio')
-                        .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras "), 
+            nombreProveedor: Yup.string(),
+                        // .required('El nombre del Proveedor es obligatorio')
+                        // .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras "), 
             nombre: Yup.string() 
                         .required('El nombre del producto es obligatorio')
                         .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras "),
@@ -161,6 +166,9 @@ const NuevoProducto = () => {
             </div>
         )
     }
+    const seleccionarProveedor = proveedores => {
+        setCliente(proveedores);
+    }
 
     return ( 
         <Layout>
@@ -172,7 +180,17 @@ const NuevoProducto = () => {
                         className="bg-white shadow-md px-8 pt-6 pb-8 mb-4"
                         onSubmit={formik.handleSubmit}
                     >
-                            <div className="mb-4">
+                             <p className="mt-10 my-2 bg-white border-l-4 border-gray-800 text-gray-700 p-2 text-sm font-bold">1.- Asigna un proveedor para la compra</p>
+                            <Select
+                                className="mt-3"
+                                // options={ obtenerProveedores}
+                                onChange={ opcion => seleccionarProveedor(opcion) }
+                                getOptionValue={ opciones => opciones.id }
+                                getOptionLabel={ opciones => opciones.nombre+'  '+opciones.apellido}
+                                placeholder="Busque o Seleccione el Proveedor"
+                                noOptionsMessage={() => "No hay resultados"}
+                         />
+                            {/* <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombreProveedor">
                                     Nombre del Proveedor
                                 </label>
@@ -193,10 +211,10 @@ const NuevoProducto = () => {
                                     <p className="font-bold">Error</p>
                                     <p>{formik.errors.nombreProveedor}</p>
                                 </div>
-                            ) : null  }
+                            ) : null  } */}
 
                         <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="marca">
+                                <label className="block text-gray-700 text-sm font-bold mb-2 p-2" htmlFor="marca">
                                     Marca del Producto
                                 </label>
 
