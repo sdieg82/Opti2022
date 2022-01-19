@@ -67,12 +67,16 @@ const EditarCliente = () => {
     // Schema de validacion
     const schemaValidacion = Yup.object({
         nombre: Yup.string() 
-                    .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras ")
+                    .matches(/^[aA-zZ\s]+$/, "Ingrese solo letras ")
                     .required('El nombre del cliente es obligatorio'),
         apellido: Yup.string() 
-                    .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras ")
+                    .matches(/^[aA-zZ\s]+$/, "Ingrese solo letras ")
                     .required('El apellido del cliente es obligatorio'),
+        apellido: Yup.string() 
+                    .matches(/^[0-9]+$/, "Ingrese solo números ")
+                    .required('La cédula del cliente es obligatorio'),
         empresa: Yup.string() 
+                    .matches(/^[aA-zZ\s]+$/, "Ingrese solo letras ")
                     .required('El campo empresa  es obligatorio'),
         email: Yup.string()
                     .email('Email no válido') 
@@ -84,7 +88,7 @@ const EditarCliente = () => {
 
     if(loading) return 'Cargando...'
 
-    console.log(data)
+    // console.log(data?.OBTENER_CLIENTE)
     // console.log(data?.obtenerCliente)
     //  const { obtenerCliente } = data;
 
@@ -101,6 +105,7 @@ const EditarCliente = () => {
                     input: {
                         nombre, 
                         apellido,
+                        cedula, 
                         empresa, 
                         email,
                         telefono
@@ -197,7 +202,29 @@ const EditarCliente = () => {
                                 </div>
                             ) : null  }
 
-                           
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="empresa">
+                                    Cedula 
+                                </label>
+
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="cedula"
+                                    type="text"
+                                    placeholder="Cédula del cliente"
+                                    onChange={props.handleChange}
+                                    onBlur={props.handleBlur}
+                                    value={props.values.cedula}
+                                />
+                            </div>
+
+                            { props.touched.cedula && props.errors.cedula ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
+                                    <p className="font-bold">Error</p>
+                                    <p>{props.errors.cedula}</p>
+                                </div>
+                            ) : null  }
+
 
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="empresa">
