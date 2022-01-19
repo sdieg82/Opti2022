@@ -1,17 +1,20 @@
-import React from 'react';
+import React,{useState} from 'react';
 import Layout from '../../components/Layout';
 import { useRouter } from 'next/router'
 import { gql, useQuery, useMutation } from '@apollo/client'
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import Swal from 'sweetalert2';
+import Select from 'react-select'
 
 const OBTENER_PRODUCTO = gql`
     query obtenerProducto($id: ID!) {
         obtenerProducto(id: $id) {
             id
-            codigo
-            nombre
+            marca
+            modelo
+            nombreProveedor
+            nombre 
             precio
             existencia
            
@@ -24,21 +27,46 @@ const ACTUALIZAR_PRODUCTO = gql`
     mutation actualizarProducto($id: ID!, $input: ProductoInput) {
             actualizarProducto(id:$id, input:$input) {
                 id
-                codigo
-                nombre
-                existencia
+                marca
+                modelo
+                nombreProveedor
+                nombre 
                 precio
-                
+                existencia
                
             }
     }
 `;
 
+
+const OBTENER_PROVEEDORES = gql`
+    query obtenerProveedores {
+        obtenerProveedores {
+            id  
+            nombre
+            apellido
+            direccion
+            cedula
+            email
+            telefono
+          }
+    }
+
+`;
+
+
 const EditarProducto = () => {
+    
+    // let data=data1
+   
+    
     const router=useRouter();       
     const {pid}=router.query
+   
     let id=pid
     console.log(id)
+   
+    
     // console.log(id)
 
     // Consultar para obtener el producto
@@ -63,21 +91,23 @@ const EditarProducto = () => {
 
     // Schema de validación
     const schemaValidacion = Yup.object({
-        codigo: Yup.string() 
-                    .required('El código del producto es obligatorio'), 
-        nombre: Yup.string() 
-                    .required('El nombre del producto es obligatorio'), 
-        // marca: Yup.string() 
-        //             .required('La marca del producto es obligatorio'),
-        existencia: Yup.number()
-                    .required('Agrega la cantidad disponible')
-                    .positive('No se aceptan números negativos')
-                    .integer('La existencia deben ser números enteros'),
-        precio: Yup.number()
-                    .required('El precio es obligatorio')
-                    .positive('No se aceptan números negativos'),
-        
-                             
+        marca: Yup.string() 
+                        .required('La marca del producto es obligatorio'),
+            modelo: Yup.string() 
+                        .required('El modelo del producto es obligatorio'),  
+            nombreProveedor: Yup.string(),
+            //             // .required('El nombre del Proveedor es obligatorio')
+            //             // .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras "), 
+            nombre: Yup.string() 
+                        .required('El nombre del producto es obligatorio')
+                        .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras "),
+            existencia: Yup.number()
+                        .required('Agrega la cantidad disponible')
+                        .positive('No se aceptan números negativos')
+                        .integer('La existencia deben ser números enteros'),
+            precio: Yup.number()
+                        .required('El precio es obligatorio')
+                        .positive('No se aceptan números negativos'),            
     });
 
 
@@ -93,17 +123,19 @@ const EditarProducto = () => {
 
     const actualizarInfoProducto = async valores => {
         // console.log(valores);
-        const {codigo,  nombre, existencia, precio } = valores;
+        const {marca, nombre,existencia, precio,modelo,nombreProveedor} = valores;
         try {
             const {data} =  await actualizarProducto({
                 variables: {
                     id, 
                     input: {
-                        codigo,
+                        marca,
+                        modelo,
+                        nombreProveedor,
                         nombre,
+                        // marca,
                         existencia,
-                        precio,
-                        // marca
+                        precio
                         
                     }
                 }
@@ -150,34 +182,78 @@ const EditarProducto = () => {
                     <form
                         className="bg-white shadow-md px-8 pt-6 pb-8 mb-4"
                         onSubmit={props.handleSubmit}
-                    >   <div className="mb-4">
-                                
-                                
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="codigo">
-                                    Codigo
+                    >   
+                      <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
+                                    Nombre del Proveedor
                                 </label>
 
                                 <input
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="codigo"
+                                    id="nombreP"
                                     type="text"
-                                    placeholder="Codigo Producto"
+                                    placeholder="Nombre del Proveedor"
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
-                                    value={props.values.codigo}
+                                    value={props.values.nombreProveedor}
                                 />
                             </div>
 
-                            { props.touched.codigo && props.errors.codigo ? (
+                            { props.touched.nombre && props.errors.nombre ? (
                                 <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
                                     <p className="font-bold">Error</p>
-                                    <p>{props.errors.codigo}</p>
+                                    <p>{props.errors.nombre}</p>
+                                </div>
+                            ) : null  } 
+                     <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
+                                    Marca del Producto
+                                </label>
+
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="marca"
+                                    type="text"
+                                    placeholder="Marca del Producto"
+                                    onChange={props.handleChange}
+                                    onBlur={props.handleBlur}
+                                    value={props.values.marca}
+                                />
+                            </div>
+
+                            { props.touched.nombre && props.errors.nombre ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
+                                    <p className="font-bold">Error</p>
+                                    <p>{props.errors.nombre}</p>
+                                </div>
+                            ) : null  } 
+
+                    <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="modelo">
+                                    Modelo del Producto
+                                </label>
+
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="modelo"
+                                    type="text"
+                                    placeholder="Nombre Producto"
+                                    onChange={props.handleChange}
+                                    onBlur={props.handleBlur}
+                                    value={props.values.modelo}
+                                />
+                            </div>
+
+                            { props.touched.nombre && props.errors.nombre ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
+                                    <p className="font-bold">Error</p>
+                                    <p>{props.errors.nombre}</p>
                                 </div>
                             ) : null  } 
                             
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
-                                    Nombre
+                                    Tipo del Producto
                                 </label>
 
                                 <input
