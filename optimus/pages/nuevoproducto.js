@@ -1,8 +1,8 @@
-import React,{useState} from 'react';
+import React,{useState, useEffect} from 'react';
 import Layout from '../components/Layout'
 import { useFormik } from 'formik';
 import * as Yup from 'yup'
-import {gql, useMutation} from '@apollo/client' 
+import {gql, useMutation, useQuery} from '@apollo/client' 
 import Swal from 'sweetalert2'
 import { useRouter } from 'next/router'
 import Select from 'react-select'
@@ -53,14 +53,33 @@ const OBTENER_PROVEEDORES = gql`
 
 `;
 
+ 
 const NuevoProducto = () => {
-
+    
+    const [ provider, setProvider ] = useState(undefined);
+    const [mensaje, guardarMensaje] = useState(null);
+ 
     // routing
-    const router = useRouter();
+    const  { loading, error, data }=  useQuery(OBTENER_PROVEEDORES);
 
-     // Mensaje de alerta
-     const [mensaje, guardarMensaje] = useState(null);
+    const router = useRouter();
+   
+    
+    if (loading) return 'Loading...';
+    if (error) return `Error! ${error.message}`;
+    
+    const seleccionarProveedor = proveedores => {
+        const nameProvider = proveedores.nombre + ' '+ proveedores.apellido;
+        setProvider(nameProvider);
+    }
+
+    const { obtenerProveedores } = data;
+    
+    // Mensaje de alerta
+    
      
+    
+    
     // Mutation de apollo
     const [nuevoProducto] = useMutation(NUEVO_PRODUCTO, {
         update(cache, { data: { nuevoProducto } }) {
@@ -83,7 +102,7 @@ const NuevoProducto = () => {
         initialValues: {
             marca:'',
             modelo:'',
-            nombreProveedor:'',
+            nombreProveedor:provider,
             nombre: '',
             existencia: '',
             precio: '',
@@ -96,15 +115,11 @@ const NuevoProducto = () => {
             modelo: Yup.string() 
                         .required('El modelo del producto es obligatorio'),  
             nombreProveedor: Yup.string(),
-                        // .required('El nombre del Proveedor es obligatorio')
-                        // .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras "), 
+            //             // .required('El nombre del Proveedor es obligatorio')
+            //             // .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras "), 
             nombre: Yup.string() 
                         .required('El nombre del producto es obligatorio')
                         .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras "),
-            // marca: Yup.string() 
-            //             .required('La marca del producto es obligatorio')
-            //             .matches(/^[aA-zZ\s]+$/, "Ingrese solo letras "),
-
             existencia: Yup.number()
                         .required('Agrega la cantidad disponible')
                         .positive('No se aceptan números negativos')
@@ -117,7 +132,7 @@ const NuevoProducto = () => {
          
         }), 
         onSubmit: async valores => {
-
+            console.log(valores);
             const {marca, nombre,existencia, precio,modelo,nombreProveedor} = valores;
 
             try {
@@ -126,7 +141,7 @@ const NuevoProducto = () => {
                         input: {
                             marca,
                             modelo,
-                            nombreProveedor,
+                            nombreProveedor:provider,
                             nombre,
                             // marca,
                             existencia,
@@ -138,7 +153,7 @@ const NuevoProducto = () => {
                     }
                 });
 
-                // console.log(data);
+               console.log(data);
 
                 // Mostrar una alerta
                 Swal.fire(
@@ -166,10 +181,9 @@ const NuevoProducto = () => {
             </div>
         )
     }
-    const seleccionarProveedor = proveedores => {
-        setCliente(proveedores);
-    }
 
+    
+   
     return ( 
         <Layout>
             <h1 className="text-2xl text-gray-800 font-light">Crear Nuevo Producto</h1>
@@ -181,15 +195,28 @@ const NuevoProducto = () => {
                         onSubmit={formik.handleSubmit}
                     >
                              <p className="mt-10 my-2 bg-white border-l-4 border-gray-800 text-gray-700 p-2 text-sm font-bold">1.- Asigna un proveedor para la compra</p>
-                            <Select
-                                className="mt-3"
-                                // options={ obtenerProveedores}
-                                onChange={ opcion => seleccionarProveedor(opcion) }
-                                getOptionValue={ opciones => opciones.id }
-                                getOptionLabel={ opciones => opciones.nombre+'  '+opciones.apellido}
-                                placeholder="Busque o Seleccione el Proveedor"
-                                noOptionsMessage={() => "No hay resultados"}
-                         />
+
+                             <Select
+                                    className="mt-3"
+                                    options={ obtenerProveedores }
+                                    onChange={ opcion => seleccionarProveedor(opcion) }
+                                    // getOptionValue={ opciones => opciones.id }
+                                    getOptionLabel={ opciones => opciones.nombre + " "+ opciones.apellido}
+                                    // placeholder="Busque o Seleccione el Proveer"
+                                    // noOptionsMessage={() => "No hay resultados"}
+                                    // onChange={formik.handleChange}
+                                    // onBlur={formik.handleBlur}
+                                    // value={formik.values.provider}
+                            />  
+
+                            {/* <select >
+                            
+                            <option key={obtenerProveedores.id} value={proveedor.breed}>
+                                 {proveedor.breed}
+                            </option>
+                                
+                            </select> */}
+                           
                             {/* <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombreProveedor">
                                     Nombre del Proveedor

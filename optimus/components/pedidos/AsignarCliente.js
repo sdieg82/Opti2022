@@ -32,7 +32,7 @@ const AsignarCliente = () => {
 
     // Consultar la base de datos
     const { data, loading, error } = useQuery(OBTENER_CLIENTES_USUARIO);
-
+    
     
     useEffect(() => {
         agregarCliente(cliente);
