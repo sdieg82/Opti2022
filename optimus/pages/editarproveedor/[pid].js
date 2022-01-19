@@ -57,7 +57,7 @@ const EditarProveedor = () => {
         }
     });
 
-    console.log(data)
+    
 
 
     //actulizar el proveedor
@@ -76,19 +76,17 @@ const EditarProveedor = () => {
     // Schema de validacion
     const schemaValidacion = Yup.object({
         nombre: Yup.string() 
-                    .matches(/^[aA-zZ\s]+$/, "Ingrese solo letras ")
+                    .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras ")
                     .required('El nombre del cliente es obligatorio'),
         apellido: Yup.string() 
-                    .matches(/^[aA-zZ\s]+$/, "Ingrese solo letras ")
+                    .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras ")
                     .required('El apellido del cliente es obligatorio'),
-       cedula: Yup.string() 
-                    .matches(/^[0-9]+$/, "Ingrese solo numeros ")
-                    .required('la cedula del cliente es obligatorio'),
         direccion: Yup.string() 
-                    .matches(/^[aA-zZ\s]+$/, "Ingrese solo letras ")
+                    .matches(/^[aA-zZ-á-é-í-ó-ú-Á-É-Í-Ó-Ú\s]+$/, "Ingrese solo letras ")
                     .required('La direccion del proveedor  es obligatorio'),
-        direccion: Yup.string() 
-                    .required('La direccion del proveedor  es obligatorio'),
+        telefono: Yup.string() 
+                    .required('El teléfono del proveedor  es obligatorio')
+                    .matches(/^[0-9]+$/, "Ingrese solo numeros "),
         email: Yup.string()
                     .email('Email no válido') 
                     .required('El email del cliente es obligatorio')
@@ -96,9 +94,7 @@ const EditarProveedor = () => {
 
     if(loading) return 'Cargando...'
 
-    // console.log(data?.OBTENER_CLIENTE)
-    // console.log(data?.obtenerCliente)
-    //  const { obtenerCliente } = data;
+  
 
     const { obtenerProveedor } = data;
 
@@ -113,7 +109,6 @@ const EditarProveedor = () => {
                     input: {
                         nombre, 
                         apellido, 
-                        cedula,
                         direccion, 
                         email,
                         telefono
@@ -166,14 +161,14 @@ const EditarProveedor = () => {
                     >
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
-                                    Nombre
+                                    Nombres Completos del Proveedor
                                 </label>
 
                                 <input
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="nombre"
                                     type="text"
-                                    placeholder="Nombre Cliente"
+                                    placeholder="Nombres del Proveedor"
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
                                     value={props.values.nombre}
@@ -189,14 +184,14 @@ const EditarProveedor = () => {
 
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="apellido">
-                                    Apellido
+                                    Apellidos Completos del Proveedor
                                 </label>
 
                                 <input
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="apellido"
                                     type="text"
-                                    placeholder="Apellido Cliente"
+                                    placeholder="Apellidos Del Proveedor"
                                     onChange={props.handleChange}
                                      onBlur={props.handleBlur}
                                     value={props.values.apellido}
@@ -209,23 +204,6 @@ const EditarProveedor = () => {
                                     <p>{props.errors.apellido}</p>
                                 </div>
                             ) : null  }
-
-                        <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cedula">
-                                    Cedula
-                                </label>
-
-                                <input
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="cedula"
-                                    type="text"
-                                    placeholder="Cedula del Cliente"
-                                    onChange={props.handleChange}
-                                    onBlur={props.handleBlur}
-                                    value={props.values.cedula}
-                                />
-                            </div>
-
                             { props.touched.cedula && props.errors.cedula ? (
                                 <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
                                     <p className="font-bold">Error</p>
@@ -235,14 +213,14 @@ const EditarProveedor = () => {
 
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="direccion">
-                                    direccion
+                                    Dirección del Proveedor
                                 </label>
 
                                 <input
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="direccion"
                                     type="text"
-                                    placeholder="Empresa Cliente"
+                                    placeholder="Dirección del Proveedor"
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
                                     value={props.values.direccion}
@@ -258,14 +236,14 @@ const EditarProveedor = () => {
 
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                                    Email
+                                    Correo Electrónico del Proveedor
                                 </label>
 
                                 <input
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="email"
                                     type="email"
-                                    placeholder="Email Cliente"
+                                    placeholder="Email del Proveedor"
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
                                     value={props.values.email}
@@ -288,7 +266,7 @@ const EditarProveedor = () => {
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                                     id="telefono"
                                     type="tel"
-                                    placeholder="Teléfono Cliente"
+                                    placeholder="Teléfono del Proveedor"
                                     onChange={props.handleChange}
                                     onBlur={props.handleBlur}
                                     value={props.values.telefono}

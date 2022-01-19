@@ -39,21 +39,6 @@ const ACTUALIZAR_PRODUCTO = gql`
 `;
 
 
-const OBTENER_PROVEEDORES = gql`
-    query obtenerProveedores {
-        obtenerProveedores {
-            id  
-            nombre
-            apellido
-            direccion
-            cedula
-            email
-            telefono
-          }
-    }
-
-`;
-
 
 const EditarProducto = () => {
     
@@ -151,13 +136,14 @@ const EditarProducto = () => {
                 'El producto se actualizó correctamente',
                 'success'
             )
-            
+            console.log(data);
         } catch (error) {
             console.log(error);
         }
+        
     }
-
     const { obtenerProducto } = data;
+    
 
     return ( 
         <Layout>
@@ -199,12 +185,7 @@ const EditarProducto = () => {
                                 />
                             </div>
 
-                            { props.touched.nombre && props.errors.nombre ? (
-                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
-                                    <p className="font-bold">Error</p>
-                                    <p>{props.errors.nombre}</p>
-                                </div>
-                            ) : null  } 
+                          
                      <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="nombre">
                                     Marca del Producto
@@ -221,10 +202,10 @@ const EditarProducto = () => {
                                 />
                             </div>
 
-                            { props.touched.nombre && props.errors.nombre ? (
+                            { props.touched.marca && props.errors.marca ? (
                                 <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
                                     <p className="font-bold">Error</p>
-                                    <p>{props.errors.nombre}</p>
+                                    <p>{props.errors.marca}</p>
                                 </div>
                             ) : null  } 
 
@@ -235,7 +216,7 @@ const EditarProducto = () => {
 
                                 <input
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="modelo"
+                                    id="nombre"
                                     type="text"
                                     placeholder="Nombre Producto"
                                     onChange={props.handleChange}
@@ -244,10 +225,10 @@ const EditarProducto = () => {
                                 />
                             </div>
 
-                            { props.touched.nombre && props.errors.nombre ? (
+                            { props.touched.modelo && props.errors.modelo ? (
                                 <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
                                     <p className="font-bold">Error</p>
-                                    <p>{props.errors.nombre}</p>
+                                    <p>{props.errors.modelo}</p>
                                 </div>
                             ) : null  } 
                             

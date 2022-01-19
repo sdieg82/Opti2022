@@ -36,7 +36,6 @@ const typeDefs = gql`
         telefono: String
         vendedor: ID
         creado:String
-        #cedula:String
     }
 
     type Proveedor {
