@@ -25,13 +25,7 @@ const Sidebar = () => {
                     </Link>
                 </li>
                
-                <li className={router.pathname === "/productos" ? "bg-blue-800 p-2" : "p-2"}>
-                    <Link href="/productos">
-                        <a className="text-white block">
-                            Productos
-                        </a>
-                    </Link>
-                </li>
+               
                 <li className={router.pathname === "/proveedores" ? "bg-blue-800 p-2" : "p-2"}>
                     <Link href="/proveedores">
                         <a className="text-white block">
@@ -79,10 +73,10 @@ const Sidebar = () => {
             </nav>
 
             <nav className="mt-5 list-none">
-                <li className={router.pathname === "/comprasProveedores" ? "bg-blue-800 p-2" : "p-2"}>
-                    <Link href="/compras">
+            <li className={router.pathname === "/productos" ? "bg-blue-800 p-2" : "p-2"}>
+                    <Link href="/productos">
                         <a className="text-white block">
-                            Registro de compras a proveedores
+                            Registro de compras y Stock
                         </a>
                     </Link>
                 </li>

@@ -123,7 +123,7 @@ const EditarProducto = () => {
 
     const actualizarInfoProducto = async valores => {
         // console.log(valores);
-        const {marca, nombre,existencia, precio,modelo,nombreProveedor} = valores;
+        const {marca, nombre,modelo,nombreProveedor} = valores;
         try {
             const {data} =  await actualizarProducto({
                 variables: {
@@ -134,8 +134,8 @@ const EditarProducto = () => {
                         nombreProveedor,
                         nombre,
                         // marca,
-                        existencia,
-                        precio
+                      
+                     
                         
                     }
                 }
@@ -299,51 +299,6 @@ const EditarProducto = () => {
 
                              
 
-                            <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="existencia">
-                                    Cantidad Disponible
-                                </label>
-
-                                <input
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="existencia"
-                                    type="number"
-                                    placeholder="Cantidad Disponible"
-                                    onChange={props.handleChange}
-                                    onBlur={props.handleBlur}
-                                    value={props.values.existencia}
-                                />
-                            </div>
-
-                            { props.touched.existencia && props.errors.existencia ? (
-                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
-                                    <p className="font-bold">Error</p>
-                                    <p>{props.errors.existencia}</p>
-                                </div>
-                            ) : null  } 
-
-                            <div className="mb-4">
-                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="precio">
-                                    Precio
-                                </label>
-
-                                <input
-                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="precio"
-                                    type="number"
-                                    placeholder="Precio Producto"
-                                    onChange={props.handleChange}
-                                    onBlur={props.handleBlur}
-                                    value={props.values.precio}
-                                />
-                            </div>
-
-                            { props.touched.precio && props.errors.precio ? (
-                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
-                                    <p className="font-bold">Error</p>
-                                    <p>{props.errors.precio}</p>
-                                </div>
-                            ) : null  } 
 
 
                             <input
