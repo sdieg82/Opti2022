@@ -17,7 +17,10 @@ const NUEVO_PRODUCTO = gql`
             nombreProveedor
             nombre
             existencia
-            precio    
+            precio 
+            precioCompra 
+            cantidadCompra 
+            creado   
         }
     }
 `;
@@ -32,6 +35,7 @@ const OBTENER_PRODUCTOS = gql`
           nombre 
           precio
           existencia
+          
       }
   }
 `;
@@ -56,17 +60,21 @@ const OBTENER_PROVEEDORES = gql`
  
 const NuevoProducto = () => {
     
+    // routing
+    const router = useRouter();
+
     const [ provider, setProvider ] = useState(undefined);
     const [mensaje, guardarMensaje] = useState(null);
  
-    // routing
+    
     const  { loading, error, data }=  useQuery(OBTENER_PROVEEDORES);
 
-    const router = useRouter();
-   
-    
     if (loading) return 'Loading...';
     if (error) return `Error! ${error.message}`;
+    
+    
+   
+    
     
     const seleccionarProveedor = proveedores => {
         const nameProvider = proveedores.nombre + ' '+ proveedores.apellido;
@@ -106,6 +114,8 @@ const NuevoProducto = () => {
             nombre: '',
             existencia: '',
             precio: '',
+            precioCompra: '',
+            cantidadCompra: '',
             
             
         },
@@ -127,13 +137,19 @@ const NuevoProducto = () => {
             precio: Yup.number()
                         .required('El precio es obligatorio')
                         .positive('No se aceptan números negativos'),
+            precioCompra: Yup.number()
+                        .required('El precio es obligatorio')
+                        .positive('No se aceptan números negativos'),
+            cantidadCompra: Yup.number()
+                        .required('El precio es obligatorio')
+                        .positive('No se aceptan números negativos'),
             
                         
          
         }), 
         onSubmit: async valores => {
             console.log(valores);
-            const {marca, nombre,existencia, precio,modelo,nombreProveedor} = valores;
+            const {marca, nombre,existencia, precio,modelo,nombreProveedor,precioCompra,cantidadCompra} = valores;
 
             try {
                 const { data } = await nuevoProducto({
@@ -143,9 +159,11 @@ const NuevoProducto = () => {
                             modelo,
                             nombreProveedor:provider,
                             nombre,
-                            // marca,
                             existencia,
-                            precio
+                            precio,
+                            precioCompra,
+                            cantidadCompra
+
                            
                         
                             
@@ -354,6 +372,52 @@ const NuevoProducto = () => {
                                 <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
                                     <p className="font-bold">Error</p>
                                     <p>{formik.errors.existencia}</p>
+                                </div>
+                            ) : null  }
+
+<div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cantidadCompra">
+                                    Cantidad Compra
+                                </label>
+
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="cantidadCompra"
+                                    type="number"
+                                    placeholder="Cantidad Compra"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.cantidadCompra}
+                                />
+                            </div>
+
+                            { formik.touched.cantidadCompra && formik.errors.cantidadCompra ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
+                                    <p className="font-bold">Error</p>
+                                    <p>{formik.errors.cantidadCompra}</p>
+                                </div>
+                            ) : null  }
+
+<div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="existencia">
+                                    Precio de Compra
+                                </label>
+
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="precioCompra"
+                                    type="number"
+                                    placeholder="Precio Compra Disponible"
+                                    onChange={formik.handleChange}
+                                    onBlur={formik.handleBlur}
+                                    value={formik.values.precioCompra}
+                                />
+                            </div>
+
+                            { formik.touched.precioCompra && formik.errors.precioCompra ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
+                                    <p className="font-bold">Error</p>
+                                    <p>{formik.errors.precioCompra}</p>
                                 </div>
                             ) : null  }
 

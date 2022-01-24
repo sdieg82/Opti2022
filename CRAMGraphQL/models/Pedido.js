@@ -23,10 +23,7 @@ const ProductoSchema=mongoose.Schema({
         type:String,
         default:'COMPLETADO'
     },
-    creado:{
-        type:Date,
-        default:Date.now()
-    }
+    creado: { type: String, default: Date } 
     
 
 

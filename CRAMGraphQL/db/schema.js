@@ -23,6 +23,8 @@ const typeDefs = gql`
         nombre: String
         existencia: Int
         precio: Float
+        cantidadCompra:Int
+        precioCompra:Float
         creado: String
     }
 
@@ -104,6 +106,8 @@ const typeDefs = gql`
         nombre: String!
         existencia: Int!
         precio: Float!
+        cantidadCompra:Int
+        precioCompra:Float
         
     }
 
@@ -189,6 +193,7 @@ const typeDefs = gql`
         # Productos
         nuevoProducto(input: ProductoInput) : Producto
         actualizarProducto( id: ID!, input : ProductoInput ) : Producto
+        actualizarProductoCompra( id: ID!, input : ProductoInput ) : Producto
         eliminarProducto( id: ID! ) : String
 
         # Clientes

@@ -19,13 +19,15 @@ const OBTENER_PRODUCTOS = gql`
           nombre
           precio
           existencia
+          cantidadCompra
+          precioCompra
           
       }
   }
 `;
 
 const Producto = ({producto}) => {
-    const { codigo, nombre, precio, marca,modelo,nombreProveedor, existencia, id } = producto;
+    const { codigo, nombre, precio, marca,modelo,nombreProveedor, existencia, id,cantidadCompra,precioCompra } = producto;
 
     // Mutation para eliminar productos
     const [ eliminarProducto ] = useMutation(ELIMINAR_PRODUCTO, {
@@ -88,6 +90,14 @@ const Producto = ({producto}) => {
         })
     }
 
+    const comprarProducto = () => {
+        console.log('click')
+        Router.push({
+            pathname: "/comprarproducto/[id]",
+            query: { id }
+        })
+    }
+
     return ( 
         <tr>
             <td className="border px-4 py-2">{nombreProveedor} </td>
@@ -97,6 +107,8 @@ const Producto = ({producto}) => {
             {/* <td className="border px-4 py-2">{marca} </td> */}
             <td className="border px-4 py-2">{existencia} Piezas</td>
             <td className="border px-4 py-2">$ {precio} </td>
+            <td className="border px-4 py-2"> {cantidadCompra} </td>
+            <td className="border px-4 py-2">$ {precioCompra} </td>
            
             {/* <td className="border px-4 py-2">
                 <button
@@ -114,9 +126,18 @@ const Producto = ({producto}) => {
                         className="flex justify-center items-center bg-green-600 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
                         onClick={() => editarProducto() }
                     >
-                        Editar
+                        
                         <svg fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" className="w-4 h-4 ml-2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                     </button>
+            </td>
+            <td className="border px-4 py-2">
+                     <button
+                        type="button"
+                        className="flex justify-center items-center bg-blue-600 py-2 px-4 w-full text-white rounded text-xs uppercase font-bold"
+                        onClick={() => comprarProducto() }
+                    >
+                        
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg> </button>
             </td>
         </tr>
      );

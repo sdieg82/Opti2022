@@ -17,7 +17,8 @@ const OBTENER_PRODUCTO = gql`
             nombre 
             precio
             existencia
-           
+            precioCompra
+            cantidadCompra
         
         }
     }
@@ -38,24 +39,26 @@ const ACTUALIZAR_PRODUCTO = gql`
     }
 `;
 
-
-const OBTENER_PROVEEDORES = gql`
-    query obtenerProveedores {
-        obtenerProveedores {
-            id  
-            nombre
-            apellido
-            direccion
-            cedula
-            email
-            telefono
-          }
+const ACTUALIZAR_PRODUCTO_COMPRA = gql`
+    mutation actualizarProductoCompra($id: ID!, $input: ProductoInput) {
+        actualizarProductoCompra(id:$id, input:$input) {
+                id
+                marca
+                modelo
+                nombreProveedor
+                nombre 
+                precio
+                existencia
+                precioCompra
+                cantidadCompra
+               
+            }
     }
-
 `;
 
 
-const EditarProducto = () => {
+
+const EditarProductoCompra = () => {
     
     
    
@@ -77,7 +80,7 @@ const EditarProducto = () => {
     });
 
     // Mutation para modificar el producto
-    const [actualizarProducto] = useMutation(ACTUALIZAR_PRODUCTO, {
+    const [actualizarProducto] = useMutation(ACTUALIZAR_PRODUCTO_COMPRA, {
         update(cache, {data: {actualizarProducto}}) {
           cache.writeQuery({
             query: OBTENER_PRODUCTO,
@@ -107,7 +110,13 @@ const EditarProducto = () => {
                         .integer('La existencia deben ser números enteros'),
             precio: Yup.number()
                         .required('El precio es obligatorio')
-                        .positive('No se aceptan números negativos'),            
+                        .positive('No se aceptan números negativos'), 
+            precioCompra: Yup.number()
+                        .required('El precio es obligatorio')
+                        .positive('No se aceptan números negativos'), 
+            cantidadCompra: Yup.number()
+                        .required('La cantidad es obligatorio')
+                        .positive('No se aceptan números negativos'),                        
     });
 
 
@@ -123,7 +132,7 @@ const EditarProducto = () => {
 
     const actualizarInfoProducto = async valores => {
         // console.log(valores);
-        const {marca, nombre,existencia, precio,modelo,nombreProveedor} = valores;
+        const {marca, nombre,existencia, precio,modelo,nombreProveedor,precioCompra,cantidadCompra} = valores;
         try {
             const {data} =  await actualizarProducto({
                 variables: {
@@ -133,9 +142,10 @@ const EditarProducto = () => {
                         modelo,
                         nombreProveedor,
                         nombre,
-                        // marca,
                         existencia,
-                        precio
+                        precio,
+                        precioCompra,
+                        cantidadCompra
                         
                     }
                 }
@@ -148,7 +158,7 @@ const EditarProducto = () => {
             // Mostrar una alerta
             Swal.fire(
                 'Correcto',
-                'El producto se actualizó correctamente',
+                'La compra se realizó correctamente',
                 'success'
             )
             
@@ -161,7 +171,7 @@ const EditarProducto = () => {
 
     return ( 
         <Layout>
-            <h1 className="text-2xl text-gray-800 font-light">Editar Producto</h1>
+            <h1 className="text-2xl text-gray-800 font-light">Añadir Existencias Producto</h1>
 
             <div className="flex justify-center mt-5">
                 <div className="w-full max-w-lg">
@@ -190,7 +200,7 @@ const EditarProducto = () => {
 
                                 <input
                                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                    id="nombreP"
+                                    id="nombreProveedor"
                                     type="text"
                                     placeholder="Nombre del Proveedor"
                                     onChange={props.handleChange}
@@ -322,6 +332,53 @@ const EditarProducto = () => {
                                     <p>{props.errors.existencia}</p>
                                 </div>
                             ) : null  } 
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cantidadCompra">
+                                    Ingrese la cantidad a Comprar
+                                </label>
+
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="cantidadCompra"
+                                    type="number"
+                                    placeholder="Cantidad a Comprar"
+                                    onChange={props.handleChange}
+                                    onBlur={props.handleBlur}
+                                    value={props.values.cantidadCompra}
+                                   
+                                />
+                            </div>
+
+                            { props.touched.cantidadCompra && props.errors.cantidadCompra ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
+                                    <p className="font-bold">Error</p>
+                                    <p>{props.errors.cantidadCompra}</p>
+                                </div>
+                            ) : null  } 
+
+                            <div className="mb-4">
+                                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="precioCompra">
+                                    Precio de la Compra
+                                </label>
+
+                                <input
+                                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                    id="precioCompra"
+                                    type="number"
+                                    placeholder="Precio Compra"
+                                    onChange={props.handleChange}
+                                    onBlur={props.handleBlur}
+                                    value={props.values.precioCompra}
+                                   
+                                />
+                            </div>
+
+                            { props.touched.precioCompra && props.errors.precioCompra ? (
+                                <div className="my-2 bg-red-100 border-l-4 border-red-500 text-red-700 p-4" >
+                                    <p className="font-bold">Error</p>
+                                    <p>{props.errors.precioCompra}</p>
+                                </div>
+                            ) : null  } 
 
                             <div className="mb-4">
                                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="precio">
@@ -351,7 +408,7 @@ const EditarProducto = () => {
                             <input
                                 type="submit"
                                 className="bg-gray-800 w-full mt-5 p-2 text-white uppercase font-bold hover:bg-gray-900"
-                                value="Guardar Cambios"
+                                value="Realizar Compra"
                             />
                     </form>
                     )
@@ -363,4 +420,4 @@ const EditarProducto = () => {
      );
 }
  
-export default EditarProducto;
+export default EditarProductoCompra;

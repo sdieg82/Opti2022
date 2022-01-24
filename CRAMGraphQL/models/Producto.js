@@ -35,9 +35,23 @@ const ProductosSchema=mongoose.Schema({
         trim:true
 
     },
+    cantidadCompra:{
+        type:Number
+    },
+    precioCompra:{
+        type:Number
+
+    },
+    marca:{
+        type:String,
+        required:true,
+        trim:true
+
+    },
     creado:{
-        type:String
-    }
+        type:Date,
+        default:Date.now()
+    },
 
 });
 

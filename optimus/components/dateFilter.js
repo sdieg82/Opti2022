@@ -7,7 +7,7 @@ const DateFilter = () => {
     // state={
     //     fecha: new Date("2021","11","07")
     // }
-    const newDate = new Date("2021","11", "07");
+    const newDate = new Date();
     // const [fecha, setFecha] = useState()
     // console.log(this.state.fecha);
         return(

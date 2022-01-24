@@ -13,6 +13,8 @@ const OBTENER_PRODUCTOS = gql`
           nombre
           precio
           existencia
+          precioCompra
+          cantidadCompra
           
       }
   }
@@ -46,15 +48,18 @@ const Productos = () => {
           <table className="table-auto shadow-md mt-10 w-full w-lg">
             <thead className="bg-gray-800">
               <tr className="text-white">
-                 <th className="w-1/7 py-2">Nombre Proveedor</th>
-                 <th className="w-1/7 py-2">Nombre del Producto</th>
-                  <th className="w-1/7 py-2">Marca</th>
-                  <th className="w-1/7 py-2">Modelo</th>
+                 <th className="w-1/10 py-2">Nombre Proveedor</th>
+                 <th className="w-1/10 py-2">Nombre del Producto</th>
+                  <th className="w-1/10 py-2">Marca</th>
+                  <th className="w-1/10 py-2">Modelo</th>
                   {/* <th className="w-1/7 py-2">Marca</th> */}
-                  <th className="w-1/7 py-2">Existencia</th>
-                  <th className="w-1/7 py-2">Precio</th>
+                  <th className="w-1/10 py-2">Existencia</th>
+                  <th className="w-1/10 py-2">Precio</th>
                  
-                  <th className="w-1/7 py-2">Editar</th>
+                  <th className="w-1/10 py-2">Ultima cantidad Comprada</th>
+                  <th className="w-1/10 py-2">Precio de Compra</th>
+                  <th className="w-1/10 py-2">Editar</th>
+                  <th className="w-1/10 py-2">Comprar</th>
                  
               </tr>
             </thead>

@@ -242,11 +242,11 @@ const resolvers = {
         nuevoProducto: async (_, {input}) => {
            // Revisar si el codigo prodcuto ya esta registrado
            
-           const { marca} = input;
-           const existeCodigo = await Producto.findOne({marca});
-           if (existeCodigo) {
-               throw new Error('El código del producto ya está registrado');
-           }
+        //    const { marca} = input;
+        //    const existeCodigo = await Producto.findOne({marca});
+        //    if (existeCodigo) {
+        //        throw new Error('El código del producto ya está registrado');
+        //    }
            
            
             try {
@@ -267,6 +267,28 @@ const resolvers = {
             if(!producto) {
                 throw new Error('Producto no encontrado');
             }
+
+            // guardarlo en la base de datos
+            producto = await Producto.findOneAndUpdate({ _id : id }, input, { new: true } );
+
+            return producto;
+        }, 
+        actualizarProductoCompra: async (_, {id, input}) => {
+            // revisar si el producto existe o no
+            let producto = await Producto.findById(id);
+
+            if(!producto) {
+                throw new Error('Producto no encontrado');
+            }
+
+            // for await ( const articulo of input.producto ) {
+                
+            // sumar la cantidad a lo disponible
+            producto.existencia = producto.existencia + producto.cantidadCompra;
+
+                   
+            // }
+
 
             // guardarlo en la base de datos
             producto = await Producto.findOneAndUpdate({ _id : id }, input, { new: true } );

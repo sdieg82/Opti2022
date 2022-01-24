@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { gql, useMutation } from '@apollo/client';
 import Swal from 'sweetalert2';
 import moment from 'moment';
+import { number } from 'yup/lib/locale';
 
 const ACTUALIZAR_PEDIDO = gql`
     mutation actualizarPedido($id: ID!, $input: PedidoInput ) {
@@ -28,8 +29,10 @@ const Pedido = ({pedido}) => {
 
 
     const { id, total, cliente: { nombre, apellido, cedula, telefono, email }, estado, cliente, creado } = pedido;
-
-    const newDate =moment(Number(creado)).format('YYYY/MM/DD HH:MM');
+    
+    // const newDate =moment.unix((Number(creado))/1000).format('YYYY/MM/DD HH:MM');
+    const newDate =moment(creado).format('YYYY/MM/DD HH:MM');
+    
     // Mutation para cambiar el estado de un pedido
     const [ actualizarPedido ] = useMutation(ACTUALIZAR_PEDIDO)
     const [ eliminarPedido] = useMutation(ELIMINAR_PEDIDO, {

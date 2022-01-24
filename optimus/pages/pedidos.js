@@ -31,7 +31,7 @@ const OBTENER_PEDIDOS = gql`
         creado
       }
   }
-`
+`;
 
 
 const Pedidos = () => {

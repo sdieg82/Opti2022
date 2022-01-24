@@ -8,12 +8,13 @@ import { gql, useQuery } from '@apollo/client';
 const BAJO_STOCK=gql`
 query Query {
     bajoStock {
-      id
-      codigo
-      nombre
-      existencia
-      precio
-      creado
+        id
+        marca
+        modelo
+        nombreProveedor
+        nombre
+        precio
+        existencia
     }
   }
 `
